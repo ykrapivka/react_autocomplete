@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Person } from '../types/Person';
 import debounce from 'lodash.debounce';
 
@@ -18,9 +18,13 @@ export const Autocomplete: React.FC<Props> = ({
   onError,
 }) => {
   const [appliedQuery, setAppliedQuery] = useState(query);
-  const applyQuery = debounce(setAppliedQuery, delay);
 
-  applyQuery(query);
+  useEffect(() => {
+    const applyQuery = debounce(setAppliedQuery, delay);
+
+    applyQuery(query);
+  }, [query]);
+
   const filteredPeople = [...people].filter(person =>
     person.name.includes(appliedQuery),
   );
@@ -34,18 +38,21 @@ export const Autocomplete: React.FC<Props> = ({
   return (
     <div className="dropdown-menu" role="menu" data-cy="suggestions-list">
       <div className="dropdown-content">
-        <div className="dropdown-item" data-cy="suggestion-item">
-          {filteredPeople.map((person: Person) => (
+        {filteredPeople.map((person: Person) => (
+          <div
+            className="dropdown-item"
+            data-cy="suggestion-item"
+            key={person.name}
+          >
             <p
               className="has-text-link"
-              key={person.name}
               onMouseDown={() => onSelected(person)}
               style={{ pointerEvents: 'auto' }}
             >
               {person.name}
             </p>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   );

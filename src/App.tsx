@@ -11,7 +11,7 @@ export const App: React.FC = () => {
   const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
   const field = useRef(null);
 
-  function handlingErrror(boolean: boolean) {
+  function handlingError(boolean: boolean) {
     setError(boolean);
   }
 
@@ -55,7 +55,7 @@ export const App: React.FC = () => {
               query={query}
               people={peopleFromServer}
               onSelected={selectAPerson}
-              onError={handlingErrror}
+              onError={handlingError}
             />
           )}
         </div>
